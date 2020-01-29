@@ -16,7 +16,7 @@ cc_binary(
         "-s DISABLE_EXCEPTION_CATCHING=1",
         "-s FILESYSTEM=0",
         "-s EXIT_RUNTIME=0",
-        "-s EXPORTED_FUNCTIONS=[_malloc, _free]",
+        "-s EXPORTED_FUNCTIONS=[_malloc,_free]",
         "-s EXTRA_EXPORTED_RUNTIME_METHODS=[cwrap]",
         "-s MODULARIZE=1",
         "-s EXPORT_NAME=WasmBackendModule",
@@ -28,7 +28,7 @@ cc_binary(
     ],
     copts = [
         "-Iexternal/tfjs/tfjs-backend-wasm",
-        "-Wno-unused-variables",
+        "-Wno-unused-variable",
     ],
 )
 
