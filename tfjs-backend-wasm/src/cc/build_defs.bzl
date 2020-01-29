@@ -15,6 +15,9 @@ def tfjs_unit_test(name, srcs, deps = []):
         deps = [
             "@gtest//:gtest_main",
         ] + deps,
+        copts = [
+            "-Iexternal/tfjs/tfjs-backend-wasm",
+        ],
     )
 
 def tfjs_cc_library(name, srcs = [], hdrs = [], deps = []):
@@ -32,5 +35,8 @@ def tfjs_cc_library(name, srcs = [], hdrs = [], deps = []):
         srcs = srcs,
         hdrs = hdrs,
         deps = deps,
-        copts = [ "-Iexternal/tfjs/tfjs-backend-wasm" ],
+        copts = [
+            "-Iexternal/tfjs/tfjs-backend-wasm",
+            "-Wno-unused-variable",
+        ],
     )
