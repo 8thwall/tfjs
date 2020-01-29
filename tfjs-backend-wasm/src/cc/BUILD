@@ -1,3 +1,4 @@
+load("@code8//bzl/js:js.bzl", "jsasm_binary")
 load(":build_defs.bzl", "tfjs_cc_library", "tfjs_unit_test")
 
 # Emcripten produces a much larger wasm bundle unless the cc_binary has srcs
@@ -7,21 +8,29 @@ KERNELS_WITH_KEEPALIVE = glob(
     exclude = ["**/*_test.cc"],
 )
 
-cc_binary(
-    name = "tfjs-backend-wasm.js",
-    srcs = ["backend.cc"] + KERNELS_WITH_KEEPALIVE,
-    linkopts = [
-        "-s ALLOW_MEMORY_GROWTH=1",
-        "-s DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=[]",
-        "-s DISABLE_EXCEPTION_CATCHING=1",
-        "-s FILESYSTEM=0",
-        "-s EXIT_RUNTIME=0",
-        "-s EXPORTED_FUNCTIONS=[_malloc,_free]",
-        "-s EXTRA_EXPORTED_RUNTIME_METHODS=[cwrap]",
-        "-s MODULARIZE=1",
-        "-s EXPORT_NAME=WasmBackendModule",
-        "-s MALLOC=emmalloc",
+jsasm_binary(
+    name = "tfjs-backend-wasm",
+    cc_binaries = [":tfjs-backend-wasm-cc"],
+    emopts = [
+        "TOTAL_MEMORY=32mb",  # Must be a multiple of 16MB.
+        "ALLOW_MEMORY_GROWTH=1",
+        "DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=[]",
+        "SPLIT_MEMORY=0",
+        "MODULARIZE=1",
+        "EXPORT_NAME=WasmBackendModule",
+        "EXTRA_EXPORTED_RUNTIME_METHODS=[GL,stringToUTF8,writeArrayToMemory]",
+        "EXPORTED_FUNCTIONS=[_malloc,_free]",
+        "EXTRA_EXPORTED_RUNTIME_METHODS=[cwrap]",
+        "MALLOC=emmalloc",
     ],
+    html = 0,
+    single_file = 1,
+    wasm = 1,
+)
+
+cc_binary(
+    name = "tfjs-backend-wasm-cc",
+    srcs = ["backend.cc"] + KERNELS_WITH_KEEPALIVE,
     deps = [
         ":all_kernels",
         ":backend",
