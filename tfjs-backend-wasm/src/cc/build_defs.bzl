@@ -13,7 +13,7 @@ def tfjs_unit_test(name, srcs, deps = []):
         srcs = srcs,
         linkstatic = True,
         deps = [
-            "@com_google_googletest//:gtest_main",
+            "@gtest//:gtest_main",
         ] + deps,
     )
 
