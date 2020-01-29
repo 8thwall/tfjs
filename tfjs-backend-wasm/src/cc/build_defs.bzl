@@ -32,4 +32,5 @@ def tfjs_cc_library(name, srcs = [], hdrs = [], deps = []):
         srcs = srcs,
         hdrs = hdrs,
         deps = deps,
+        copts = [ "-Iexternal/tfjs/tfjs-backend-wasm" ],
     )
