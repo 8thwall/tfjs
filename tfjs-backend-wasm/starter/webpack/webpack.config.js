@@ -1,9 +1,13 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: {
-    app: './src/index.js',
+    app: './dist/index.js',
+  },
+  externals: {
+    '@tensorflow/tfjs-core': 'tf',
   },
   devServer: {
     contentBase: './dist',
